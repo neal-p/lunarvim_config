@@ -63,11 +63,32 @@ lvim.plugins = {
   { "rose-pine/neovim" },
   { "nordtheme/vim" },
   { "catppuccin/nvim"},
+  { "kkoomen/vim-doge", config = function() vim.cmd(":call doge#install()") end},
 }
 
- 
+
 lvim.colorscheme = "catppuccin"
 lvim.tarnsparent_window = true
+
+
+-- Docstring generation settings
+vim.api.nvim_exec(
+[[
+let g:doge_doc_standard_python = "google"
+]],
+true)
+
+vim.api.nvim_exec(
+[[
+let g:doge_python_settings = {
+    \ 'single_quotes' : 0,
+    \ 'omit_redundant_param_types' : 0,
+\}
+]],
+true)
+
+
+
 
 -- python environment help
 lvim.builtin.which_key.mappings["C"] = {
