@@ -47,10 +47,33 @@ vim.opt.smartcase = true
 --undo
 vim.opt.undodir = vim.fn.expand("$HOME/.local/state/lvim")
 
+-- save session
+-- https://github.com/neovim/neovim/issues/16339
+-- When editing a file, always jump to the last known cursor position.
+-- Don't do it when the position is invalid, when inside an event handler,
+-- for a commit or rebase message
+-- (likely a different one than last time), and when using xxd(1) to filter
+-- and edit binary files (it transforms input files back and forth, causing
+-- them to have dual nature, so to speak)
+function RestoreCursorPosition()
+  local line = vim.fn.line("'\"")
+  if line > 1 and line <= vim.fn.line("$") and vim.bo.filetype ~= 'commit' and vim.fn.index({'xxd', 'gitrebase'}, vim.bo.filetype) == -1 then
+    vim.cmd('normal! g`"')
+  end
+end
+
+if vim.fn.has("autocmd") then
+  vim.cmd([[
+    autocmd BufReadPost * lua RestoreCursorPosition()
+  ]])
+end
+
+
 -- system clipboard - normal + visual vim.keymap.set('n', '<leader>y', '"+y')
 vim.keymap.set('v', '<leader>y', '"+y')
 vim.keymap.set('n', '<leader>v', '"+P')
 vim.keymap.set('v', '<leader>v', '"+P')
+
 
 -- Additional plugins
 lvim.plugins = {
@@ -65,7 +88,6 @@ lvim.plugins = {
   { "catppuccin/nvim"},
   { "kkoomen/vim-doge", config = function() vim.cmd(":call doge#install()") end},
 }
-
 
 lvim.colorscheme = "catppuccin"
 lvim.tarnsparent_window = true
@@ -89,7 +111,6 @@ true)
 
 
 
-
 -- python environment help
 lvim.builtin.which_key.mappings["C"] = {
   name = "Python",
@@ -101,21 +122,6 @@ lvim.builtin.treesitter.ensure_installed = {
   "python",
   "cpp",
 }
-
---[[ require('mason-tool-installer').setup({
-  ensure_installed = {
-    "black",
-    "flake8",
-    "clangd",
-    "pyright",
-    "bash-language-server",
-    "lua-language-server",
-    "cpplint",
-    "clangd_format",
-  }
-}
-)
-]]
 
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup({

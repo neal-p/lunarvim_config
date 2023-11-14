@@ -6,4 +6,4 @@ nvimurl=https://github.com/neovim/neovim/releases/download/v0.9.4/nvim-linux64.t
 cd $dir
 wget $nvimurl
 tar xzvf nvim-linux64.tar.gz
-ln -s ~/bin/nvim-linux64/bin/nvim ~/.local/bin/nvim
+ln -s $HOME/bin/nvim-linux64/bin/nvim $HOME/.local/bin/nvim
