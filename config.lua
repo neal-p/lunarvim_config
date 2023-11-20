@@ -5,6 +5,7 @@
 
  
 -- NEEDED FOR WSL CLIPBOARD AFTER xclip is installed
+-- IF NOT IN WSL leave commented
 vim.api.nvim_exec(
 [[
 let g:clipboard = {
@@ -68,6 +69,9 @@ if vim.fn.has("autocmd") then
   ]])
 end
 
+-- close nvimtree on open
+lvim.builtin.nvimtree.setup.actions.open_file.quit_on_open = true
+
 
 -- system clipboard - normal + visual vim.keymap.set('n', '<leader>y', '"+y')
 vim.keymap.set('v', '<leader>y', '"+y')
@@ -86,11 +90,21 @@ lvim.plugins = {
   { "rose-pine/neovim" },
   { "nordtheme/vim" },
   { "catppuccin/nvim"},
-  { "kkoomen/vim-doge", config = function() vim.cmd(":call doge#install()") end},
+  { "kkoomen/vim-doge", 
+        event = "BufRead", 
+        config = function()
+            if vim.fn.exists(":DogeGenerate") == 0 then
+                vim.cmd(":call doge#install()")
+            end
+        end
+    },
 }
 
 lvim.colorscheme = "catppuccin"
 lvim.tarnsparent_window = true
+
+
+-- close explorer on file select
 
 
 -- Docstring generation settings

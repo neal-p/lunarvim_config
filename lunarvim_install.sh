@@ -7,7 +7,7 @@ LV_BRANCH='release-1.3/neovim-0.9' bash <(curl -s https://raw.githubusercontent.
 mkdir -p $HOME/.lvim/undodir/
 
 # Link the config from this repo to lunarvim
-ln -s ./config.lua $HOME/.config/lvim/config.lua
+ln -s $(pwd)/config.lua $HOME/.config/lvim/config.lua
 
 # FOR CLIPBOARD:
 XCLIP=false
